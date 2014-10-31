@@ -8,16 +8,17 @@ html(lang="en")
   body.container
     .row
       .col-md-12
-        div.
+        div.username.
           username: #{session.username}
 
         :some(type="thing")
           hello
 
-        if true
-          p True!
-        else
-          p False!
+    .row
+      .col-md-6
+        if session.query
+          each v, k in session.query
+            li #{k}: #{v}
 
     script(src="/public/my.js")
     script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js")

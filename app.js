@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-express = require("express");
-jade = require("jade");
-assets = require("connect-assets");
-bodyParser = require('body-parser');
-methodOverride = require('method-override');
-logger = require("morgan");
-cookieParser = require("cookie-parser");
-cookieSession = require("cookie-session");
-path = require("path");
-http = require("http");
+var express        = require("express"),
+    jade           = require("jade"),
+    assets         = require("connect-assets"),
+    bodyParser     = require('body-parser'),
+    methodOverride = require('method-override'),
+    logger         = require("morgan"),
+    cookieParser   = require("cookie-parser"),
+    cookieSession  = require("cookie-session"),
+    path           = require("path"),
+    http           = require("http");
 
-app = express();
+var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set("views", path.join(__dirname, 'views'));
 app.set("view engine", "jade");
@@ -44,8 +44,13 @@ jade.filters.some = function(block, args) {
 };
 
 app.get("/", function(req, res) {
+  res.redirect('/index');
+});
+
+app.get("/:page([a-z0-9_-]+)", function(req, res) {
   req.session.username = "John Doe";
-  return res.render("index");
+  req.session.query = req.query
+  res.render("index");
 });
 
 http.createServer(app).listen(app.get("port"), function() {
