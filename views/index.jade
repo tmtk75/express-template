@@ -1,0 +1,31 @@
+doctype html
+html(lang="en")
+  head
+    title= "my-app"
+    link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css")
+    != css("app")
+
+  body.container
+    .row
+      .col-md-12
+        div.
+          username: #{session.username}
+
+        :some(type="thing")
+          hello
+
+        if true
+          p True!
+        else
+          p False!
+
+    script(src="/public/my.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/vue/0.10.6/vue.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.25/Bacon.min.js")
+
+    != js("app")
+
+    script.
+      console.log("directly");

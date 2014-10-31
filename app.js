@@ -7,11 +7,9 @@ methodOverride = require('method-override');
 logger = require("morgan");
 cookieParser = require("cookie-parser");
 cookieSession = require("cookie-session");
-serveFavicon = require("serve-favicon");
 path = require("path");
 http = require("http");
 
-var app, listen;
 app = express();
 app.set('port', process.env.PORT || 3000);
 app.set("views", path.join(__dirname, 'views'));
@@ -22,16 +20,30 @@ app.use(methodOverride());
 app.use(cookieParser());
 app.use(cookieSession({ keys: ['adf19dfe1a4bbdd949326870e3997d799b758b9b'] }));
 app.use(logger('dev'));
-app.use(require("./locals"));
+app.use( function(req, res, next) {
+  res.locals.session = req.session;
+  return next();
+});
 app.use(assets());
 app.use('/public', express["static"](path.join(__dirname, "public")));
-app.use(require("./text"));
+app.use(function(req, res, next) {
+  if (req.is('text/*')) {
+    req.text = '';
+    req.setEncoding('utf8');
+    req.on('data', function(chunk) {
+      return req.text += chunk;
+    });
+    return req.on('end', next);
+  } else {
+    return next();
+  }
+});
 
-easy.jade.filters.some = function(block, args) {
+jade.filters.some = function(block, args) {
   return "" + block + ", " + args.type;
 };
 
-easy.app.get("/", function(req, res) {
+app.get("/", function(req, res) {
   req.session.username = "John Doe";
   return res.render("index");
 });
